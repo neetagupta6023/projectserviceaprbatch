@@ -32,8 +32,10 @@ public class FakeProductService implements ProductService{
     }
 
     @Override
-    public Product createProduct() {
-        return null;
+    public Product createProduct(Product product) {
+        FakeStoreProductDto fakeStoreProductDto=convertProductToDto(product);
+        fakeStoreProductDto=restTemplate.postForObject("https://fakestoreapi.com/products",fakeStoreProductDto,FakeStoreProductDto.class);
+        return convertDtoToProduct(fakeStoreProductDto);
     }
 
     @Override
@@ -62,5 +64,21 @@ public class FakeProductService implements ProductService{
         product.setCategory(category);
 
         return product;
+    }
+
+    private FakeStoreProductDto convertProductToDto(Product product)
+    {
+        if(product==null)
+            return null;
+        FakeStoreProductDto fakeStoreProductDto = new FakeStoreProductDto();
+
+        fakeStoreProductDto.setDescription(product.getDescription());
+        fakeStoreProductDto.setTitle(product.getTitle());
+        fakeStoreProductDto.setPrice(product.getPrice());
+        if(product.getCategory()!=null)
+            fakeStoreProductDto.setCategory(product.getCategory().getTitle());
+        else
+            fakeStoreProductDto.setCategory(null);
+        return fakeStoreProductDto;
     }
 }
