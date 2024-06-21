@@ -2,6 +2,8 @@ package com.example.projectserviceaprbatch.controllers;
 
 import com.example.projectserviceaprbatch.models.Product;
 import com.example.projectserviceaprbatch.services.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,12 +25,12 @@ public class ProductController {
     @GetMapping
     public List<Product> getProducts()
     {
-        return new ArrayList<Product>();
+        return productService.getAllProducts();
     }
     @PostMapping
-    public Product createProduct(@RequestBody Product product )
+    public ResponseEntity<Product> createProduct(@RequestBody Product product )
     {
-        return productService.createProduct(product);
+        return new ResponseEntity<>(productService.createProduct(product), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -40,7 +42,7 @@ public class ProductController {
     @PatchMapping("/{id}")
     public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product)
     {
-        return new Product();
+        return productService.updateProduct(id,product);
     }
 
     @DeleteMapping("/{id}")

@@ -6,6 +6,7 @@ import com.example.projectserviceaprbatch.models.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class FakeProductService implements ProductService{
@@ -23,12 +24,20 @@ public class FakeProductService implements ProductService{
 
     @Override
     public List<Product> getAllProducts() {
-        return List.of();
+        FakeStoreProductDto[] fakeStoreProductDtoList= restTemplate.getForObject("https://fakestoreapi.com/products", FakeStoreProductDto[].class);
+        List<Product> products=new ArrayList<Product>();
+        for(FakeStoreProductDto fakeStoreProductDto:fakeStoreProductDtoList)
+        {
+            products.add(convertDtoToProduct(fakeStoreProductDto));
+        }
+        return products;
     }
 
     @Override
-    public Product updateProduct() {
-        return null;
+    public Product updateProduct(Long id,Product product) {
+        FakeStoreProductDto fakeStoreProductDto=convertProductToDto(product);
+        fakeStoreProductDto=fakeStoreProductDto=restTemplate.patchForObject("https://fakestoreapi.com/products/" + id,fakeStoreProductDto,FakeStoreProductDto.class);
+        return convertDtoToProduct(fakeStoreProductDto);
     }
 
     @Override
