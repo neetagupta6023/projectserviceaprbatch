@@ -1,5 +1,6 @@
 package com.example.projectserviceaprbatch.controllers;
 
+import com.example.projectserviceaprbatch.exceptions.ProductLimitReachedException;
 import com.example.projectserviceaprbatch.models.Product;
 import com.example.projectserviceaprbatch.services.ProductService;
 import org.springframework.http.HttpStatus;
@@ -12,15 +13,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private ProductService productService;
+    private final ProductService productService;
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable("id") Long id)
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id)throws ProductLimitReachedException
     {
-        return productService.getProductById(id);
+        if(id>=100)
+        {
+            throw new ProductLimitReachedException("There is a limit of 100");
+        }
+        return new ResponseEntity<>(productService.getProductById(id),HttpStatus.OK);
     }
     @GetMapping
     public List<Product> getProducts()
@@ -34,9 +39,12 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public Product replaceProduct(@PathVariable("id") Long id, @RequestBody Product product)
-    {
-        return new Product();
+    public ResponseEntity<Product> replaceProduct(@PathVariable("id") Long id, @RequestBody Product product) throws ProductLimitReachedException {
+        if(id>100)
+        {
+            throw new ProductLimitReachedException("There can be max of 100 items");
+        }
+        return new ResponseEntity<>(productService.getProductById(id),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PatchMapping("/{id}")
