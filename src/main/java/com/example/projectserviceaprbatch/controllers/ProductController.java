@@ -3,6 +3,7 @@ package com.example.projectserviceaprbatch.controllers;
 import com.example.projectserviceaprbatch.exceptions.ProductLimitReachedException;
 import com.example.projectserviceaprbatch.models.Product;
 import com.example.projectserviceaprbatch.services.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
-    public ProductController(ProductService productService) {
+    public ProductController(@Qualifier("selfservice") ProductService productService) {
         this.productService = productService;
     }
 
@@ -43,8 +44,8 @@ public class ProductController {
         if(id>100)
         {
             throw new ProductLimitReachedException("There can be max of 100 items");
-        }
-        return new ResponseEntity<>(productService.getProductById(id),HttpStatus.INTERNAL_SERVER_ERROR);
+        } 
+        return new ResponseEntity<>(productService.getProductById(id),HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
