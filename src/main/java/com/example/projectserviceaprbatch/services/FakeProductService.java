@@ -3,6 +3,7 @@ package com.example.projectserviceaprbatch.services;
 import com.example.projectserviceaprbatch.dtos.FakeStoreProductDto;
 import com.example.projectserviceaprbatch.models.Category;
 import com.example.projectserviceaprbatch.models.Product;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

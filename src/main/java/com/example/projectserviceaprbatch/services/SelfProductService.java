@@ -13,7 +13,7 @@ import java.util.Optional;
 @Primary
 @Service("selfservice")
 public class SelfProductService implements ProductService{
-    private ProductRepos productRepos;
+    private final ProductRepos productRepos;
     private CategoryRepos categoryRepos;
     public SelfProductService(ProductRepos productRepos, CategoryRepos categoryRepos) {
         this.productRepos=productRepos;

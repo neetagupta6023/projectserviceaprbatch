@@ -13,22 +13,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 @Getter
-@Setter
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private final ProductService productService;
-    public ProductController(ProductService productService) {
+    private ProductService productService;
+    ProductController(ProductService productService) {
         this.productService = productService;
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") Long id)throws ProductLimitReachedException
     {
-        if(id>=100)
-        {
-            throw new ProductLimitReachedException("There is a limit of 100");
-        }
         return new ResponseEntity<>(productService.getProductById(id),HttpStatus.OK);
     }
     @GetMapping
