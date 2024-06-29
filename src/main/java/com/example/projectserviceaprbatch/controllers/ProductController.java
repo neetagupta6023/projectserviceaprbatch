@@ -3,6 +3,8 @@ package com.example.projectserviceaprbatch.controllers;
 import com.example.projectserviceaprbatch.exceptions.ProductLimitReachedException;
 import com.example.projectserviceaprbatch.models.Product;
 import com.example.projectserviceaprbatch.services.ProductService;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +12,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Getter
+@Setter
 @RestController
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
-    public ProductController(@Qualifier("selfservice") ProductService productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
